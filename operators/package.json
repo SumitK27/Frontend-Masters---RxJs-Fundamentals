@@ -1,0 +1,32 @@
+{
+  "name": "operators",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "take": "ts-node src/take.ts",
+    "skip": "ts-node src/skip.ts",
+    "takeWhile": "ts-node src/takeWhile.ts",
+    "skipWhile": "ts-node src/skipWhile.ts",
+    "filter": "ts-node src/filter.ts",
+    "map": "ts-node src/map.ts",
+    "mapTo": "ts-node src/mapTo.ts",
+    "reduce": "ts-node src/reduce.ts",
+    "scan": "ts-node src/scan.ts",
+    "tap": "ts-node src/tap.ts",
+    "takeUntil": "ts-node src/takeUntil.ts",
+    "skipUntil": "ts-node src/skipUntil.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.8",
+    "nodemon": "^3.1.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.2"
+  }
+}
