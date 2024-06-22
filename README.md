@@ -7,6 +7,8 @@
     - [**FromEvent**](#fromevent)
     - [**BindCallback**](#bindcallback)
     - [**FromFetch**](#fromfetch)
+    - [**Interval**](#interval)
+    - [**Timer**](#timer)
   - [**Methods**](#methods)
     - [**Subscribe**](#subscribe)
     - [**UnSubscribe**](#unsubscribe)
@@ -87,6 +89,30 @@ import { fromFetch } from 'rxjs';
 
 const observable = fromFetch('https://jsonplaceholder.typicode.com/posts');
 observable.subscribe((response) => console.log(response));
+```
+
+#### **Interval**
+
+- Used to create observable that emits values in sequence at every specified interval.
+- It takes one argument: interval in milliseconds.
+
+```typescript
+import { interval } from 'rxjs';
+
+const observable = interval(1000); // Emits value every second
+observable.subscribe((value) => console.log(value));
+```
+
+#### **Timer**
+
+- Used to create observable that emits values in sequence at every specified interval.
+- It takes two arguments: initial delay and interval in milliseconds.
+
+```typescript
+import { timer } from 'rxjs';
+
+const observable = timer(1000, 5000); // Emits value after 1 second and then every 5 seconds
+observable.subscribe((value) => console.log(value));
 ```
 
 [⬆ back to top](#)
