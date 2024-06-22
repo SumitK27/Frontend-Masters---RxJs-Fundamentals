@@ -14,7 +14,14 @@
     "scan": "ts-node src/scan.ts",
     "tap": "ts-node src/tap.ts",
     "takeUntil": "ts-node src/takeUntil.ts",
-    "skipUntil": "ts-node src/skipUntil.ts"
+    "skipUntil": "ts-node src/skipUntil.ts",
+    "throttleTime": "ts-node src/throttleTime.ts",
+    "debounceTime": "ts-node src/debounceTime.ts",
+    "delay": "ts-node src/delay.ts",
+    "merge": "ts-node src/merge.ts",
+    "concat": "ts-node src/concat.ts",
+    "race": "ts-node src/race.ts",
+    "forkJoin": "ts-node src/forkJoin.ts"
   },
   "keywords": [],
   "author": "",

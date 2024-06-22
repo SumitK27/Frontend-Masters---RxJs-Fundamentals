@@ -17,6 +17,8 @@
     - [**TakeUntil**](#takeuntil)
     - [**SkipUntil**](#skipuntil)
     - [**Filter**](#filter)
+    - [**ThrottleTime**](#throttletime)
+    - [**DebounceTime**](#debouncetime)
   - [**Mathematical and Aggregate Operators**](#mathematical-and-aggregate-operators)
     - [**Reduce**](#reduce)
   - [**Transformation Operators**](#transformation-operators)
@@ -25,6 +27,12 @@
     - [**Scan**](#scan)
   - [**Utility Operators**](#utility-operators)
     - [**Tap**](#tap)
+    - [**Delay**](#delay)
+  - [**Join Creation**](#join-creation)
+    - [**Merge**](#merge)
+    - [**Concat**](#concat)
+    - [**Race**](#race)
+    - [**ForkJoin**](#forkjoin)
   - [**Miscellaneous**](#miscellaneous)
     - [**FromFetch**](#fromfetch)
 - [**Methods**](#methods)
@@ -228,6 +236,36 @@ const observable = from([1, 2, 3, 4, 5]).pipe(filter((value) => value % 2 === 0)
 observable.subscribe((value) => console.log(value));
 ```
 
+#### **ThrottleTime**
+
+- Used to throttle values from the observable based on the time interval.
+- It emits the first value and then ignores the values for the specified time interval.
+- It takes one argument: time in milliseconds.
+
+```typescript
+import { of } from 'rxjs';
+import { throttleTime } from 'rxjs/operators';
+
+const observable = from([1, 2, 3, 4, 5]).pipe(throttleTime(1000));
+observable.subscribe((value) => console.log(value));
+```
+
+#### **DebounceTime**
+
+- Used to debounce values from the observable based on the time interval.
+- It emits the last value after the specified time interval.
+- It takes one argument: time in milliseconds.
+
+```typescript
+import { of } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+
+const observable = from([1, 2, 3, 4, 5]).pipe(debounceTime(1000));
+observable.subscribe((value) => console.log(value));
+```
+
+[⬆ back to top](#)
+
 ### **Mathematical and Aggregate Operators**
 
 #### **Reduce**
@@ -302,6 +340,83 @@ import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 const observable = from([1, 2, 3, 4, 5]).pipe(tap((value) => console.log(value)));
+observable.subscribe((value) => console.log(value));
+```
+
+#### **Delay**
+
+- Used to delay the values emitted by the observable.
+- It takes one argument: time in milliseconds.
+
+```typescript
+import { of } from 'rxjs';
+import { delay } from 'rxjs/operators';
+
+const observable = from([1, 2, 3, 4, 5]).pipe(delay(1000));
+observable.subscribe((value) => console.log(value));
+```
+
+### **Join Creation**
+
+#### **Merge**
+
+- Used to merge multiple observables into a single observable.
+- Runs all observables concurrently and emits values in the order they are emitted.
+- It takes one or more observables as arguments.
+
+```typescript
+import { merge, interval, take } from 'rxjs';
+
+const observable1 = interval(1000).pipe(take(3));
+const observable2 = interval(500).pipe(take(6));
+
+const observable = merge(observable1, observable2);
+observable.subscribe((value) => console.log(value));
+```
+
+#### **Concat**
+
+- Used to concatenate multiple observables into a single observable.
+- Runs all observables sequentially and emits values in the order they are emitted.
+- It takes one or more observables as arguments.
+
+```typescript
+import { concat, interval, take } from 'rxjs';
+
+const observable1 = interval(1000).pipe(take(3));
+const observable2 = interval(500).pipe(take(6));
+
+const observable = concat(observable1, observable2);
+observable.subscribe((value) => console.log(value));
+```
+
+#### **Race**
+
+- Used to combine multiple observables and emit the first value emitted by any observable.
+- It takes one or more observables as arguments.
+
+```typescript
+import { race, interval, take } from 'rxjs';
+
+const observable1 = interval(1000).pipe(take(3));
+const observable2 = interval(500).pipe(take(6));
+
+const observable = race(observable1, observable2);
+observable.subscribe((value) => console.log(value));
+```
+
+#### **ForkJoin**
+
+- Used to combine multiple observables and emit the last value emitted by all observables.
+- It takes one or more observables as arguments.
+
+```typescript
+import { forkJoin, of } from 'rxjs';
+
+const observable1 = of(1, 2, 3);
+const observable2 = of(4, 5, 6);
+
+const observable = forkJoin(observable1, observable2);
 observable.subscribe((value) => console.log(value));
 ```
 
