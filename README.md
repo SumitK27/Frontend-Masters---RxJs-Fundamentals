@@ -1,14 +1,15 @@
 # **RxJs Fundamentals** <!-- omit in toc -->
 
 - [**Observables**](#observables)
-  - [**Operators**](#operators)
+- [**Operators**](#operators)
+  - [**Creation Operators**](#creation-operators)
     - [**Of**](#of)
     - [**From**](#from)
     - [**FromEvent**](#fromevent)
     - [**BindCallback**](#bindcallback)
-    - [**FromFetch**](#fromfetch)
     - [**Interval**](#interval)
     - [**Timer**](#timer)
+  - [**Filtering Operators**](#filtering-operators)
     - [**Take**](#take)
     - [**Skip**](#skip)
     - [**TakeWhile**](#takewhile)
@@ -16,15 +17,20 @@
     - [**TakeUntil**](#takeuntil)
     - [**SkipUntil**](#skipuntil)
     - [**Filter**](#filter)
+  - [**Mathematical and Aggregate Operators**](#mathematical-and-aggregate-operators)
+    - [**Reduce**](#reduce)
+  - [**Transformation Operators**](#transformation-operators)
     - [**Map**](#map)
     - [**MapTo**](#mapto)
-    - [**Reduce**](#reduce)
     - [**Scan**](#scan)
+  - [**Utility Operators**](#utility-operators)
     - [**Tap**](#tap)
-  - [**Methods**](#methods)
-    - [**Subscribe**](#subscribe)
-    - [**UnSubscribe**](#unsubscribe)
-    - [**Pipe**](#pipe)
+  - [**Miscellaneous**](#miscellaneous)
+    - [**FromFetch**](#fromfetch)
+- [**Methods**](#methods)
+  - [**Subscribe**](#subscribe)
+  - [**UnSubscribe**](#unsubscribe)
+  - [**Pipe**](#pipe)
 
 
 ## **Observables**
@@ -39,7 +45,7 @@
   - Handle errors
   - Handle completion
 
-### **Operators**
+## **Operators**
 
 - Operators are functions that can be used to create, modify, or filter observables.
 - There are 100+ operators available in RxJS.
@@ -50,6 +56,8 @@
 - Operators can be categorized into creation, transformation, filtering, combination, multicasting, error handling, utility, conditional, mathematical.
 - More operators can be found in the [official documentation](https://rxjs.dev/guide/operators).
 
+
+### **Creation Operators**
 
 #### **Of**
 
@@ -103,18 +111,6 @@ const observable = bindCallback(callback);
 observable('Hello', (value) => console.log(value));
 ```
 
-#### **FromFetch**
-
-- Used to create observable from fetch API.
-- It takes one argument: URL.
-
-```typescript
-import { fromFetch } from 'rxjs';
-
-const observable = fromFetch('https://jsonplaceholder.typicode.com/posts');
-observable.subscribe((response) => console.log(response));
-```
-
 #### **Interval**
 
 - Used to create observable that emits values in sequence at every specified interval.
@@ -138,6 +134,8 @@ import { timer } from 'rxjs';
 const observable = timer(1000, 5000); // Emits value after 1 second and then every 5 seconds
 observable.subscribe((value) => console.log(value));
 ```
+
+### **Filtering Operators**
 
 #### **Take**
 
@@ -230,6 +228,24 @@ const observable = from([1, 2, 3, 4, 5]).pipe(filter((value) => value % 2 === 0)
 observable.subscribe((value) => console.log(value));
 ```
 
+### **Mathematical and Aggregate Operators**
+
+#### **Reduce**
+
+- Used to reduce values from the observable.
+- Only emits the final value.
+- It takes two arguments: accumulator function and initial value.
+
+```typescript
+import { of } from 'rxjs';
+import { reduce } from 'rxjs/operators';
+
+const observable = from([1, 2, 3, 4, 5]).pipe(reduce((acc, value) => acc + value, 0));
+observable.subscribe((value) => console.log(value));
+```
+
+### **Transformation Operators**
+
 #### **Map**
 
 - Used to transform values from the observable.
@@ -257,20 +273,6 @@ const observable = from([1, 2, 3, 4, 5]).pipe(mapTo(10));
 observable.subscribe((value) => console.log(value));
 ```
 
-#### **Reduce**
-
-- Used to reduce values from the observable.
-- Only emits the final value.
-- It takes two arguments: accumulator function and initial value.
-
-```typescript
-import { of } from 'rxjs';
-import { reduce } from 'rxjs/operators';
-
-const observable = from([1, 2, 3, 4, 5]).pipe(reduce((acc, value) => acc + value, 0));
-observable.subscribe((value) => console.log(value));
-```
-
 #### **Scan**
 
 - Used to reduce values from the observable.
@@ -284,6 +286,8 @@ import { scan } from 'rxjs/operators';
 const observable = from([1, 2, 3, 4, 5]).pipe(scan((acc, value) => acc + value, 0));
 observable.subscribe((value) => console.log(value));
 ```
+
+### **Utility Operators**
 
 #### **Tap**
 
@@ -301,11 +305,28 @@ const observable = from([1, 2, 3, 4, 5]).pipe(tap((value) => console.log(value))
 observable.subscribe((value) => console.log(value));
 ```
 
+### **Miscellaneous**
+
+#### **FromFetch**
+
+- Used to create observable from fetch API.
+- It takes one argument: URL.
+
+```typescript
+import { fromFetch } from 'rxjs';
+
+const observable = fromFetch('https://jsonplaceholder.typicode.com/posts');
+observable.subscribe((response) => console.log(response));
+```
+
+
 [⬆ back to top](#)
 
-### **Methods**
 
-#### **Subscribe**
+
+## **Methods**
+
+### **Subscribe**
   - Used to listen to the values emitted by the observable.
   - It takes three arguments: next, error, and complete.
   - `next` - runs when a new value is emitted.
@@ -327,7 +348,7 @@ observable.subscribe({
   complete: () => console.log("Runs when observable completes")
 });
 ```
-#### **UnSubscribe**
+### **UnSubscribe**
 
 - Used to stop the observable from emitting values.
 - It is important to unsubscribe from the observable to avoid memory leaks.
@@ -339,7 +360,7 @@ subscription.unsubscribe();
 
 [⬆ back to top](#)
 
-#### **Pipe**
+### **Pipe**
 
 - Every observable has a pipe method that can be used to chain operators.
 - You can either use pipe multiple times or chain operators in a single pipe method.
