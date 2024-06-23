@@ -25,6 +25,10 @@
     - [**Map**](#map)
     - [**MapTo**](#mapto)
     - [**Scan**](#scan)
+    - [**MergeMap**](#mergemap)
+    - [**ConcatMap**](#concatmap)
+    - [**SwitchMap**](#switchmap)
+    - [**ExhaustMap**](#exhaustmap)
   - [**Utility Operators**](#utility-operators)
     - [**Tap**](#tap)
     - [**Delay**](#delay)
@@ -33,8 +37,15 @@
     - [**Concat**](#concat)
     - [**Race**](#race)
     - [**ForkJoin**](#forkjoin)
+  - [**Join Operators**](#join-operators)
+    - [**MergeAll**](#mergeall)
+    - [**ConcatAll**](#concatall)
+    - [**CombineLatestAll**](#combinelatestall)
+    - [**CombineLatestWith**](#combinelatestwith)
   - [**Miscellaneous**](#miscellaneous)
     - [**FromFetch**](#fromfetch)
+    - [**NEVER**](#never)
+    - [**EMPTY**](#empty)
 - [**Methods**](#methods)
   - [**Subscribe**](#subscribe)
   - [**UnSubscribe**](#unsubscribe)
@@ -77,6 +88,7 @@ import { of } from 'rxjs';
 
 const observable = of(1, 2, 3, 4, 5);
 observable.subscribe((value) => console.log(value));
+// Output: 1, 2, 3, 4, 5
 ```
 
 #### **From**
@@ -88,6 +100,7 @@ import { from } from 'rxjs';
 
 const observable = from([1, 2, 3, 4, 5]);
 observable.subscribe((value) => console.log(value));
+// Output: 1, 2, 3, 4, 5
 ```
 
 #### **FromEvent**
@@ -101,6 +114,7 @@ import { fromEvent } from 'rxjs';
 const button = document.querySelector('button');
 const observable = fromEvent(button, 'click');
 observable.subscribe((event) => console.log(event));
+// Output: MouseEvent {isTrusted: true, screenX: 0, screenY: 0, clientX: 0, clientY: 0, …}
 ```
 
 #### **BindCallback**
@@ -117,6 +131,7 @@ const callback = (value, callback) => {
 
 const observable = bindCallback(callback);
 observable('Hello', (value) => console.log(value));
+// Output: Hello
 ```
 
 #### **Interval**
@@ -129,6 +144,7 @@ import { interval } from 'rxjs';
 
 const observable = interval(1000); // Emits value every second
 observable.subscribe((value) => console.log(value));
+// Output: 0, 1, 2, 3, 4, 5, ...
 ```
 
 #### **Timer**
@@ -141,6 +157,7 @@ import { timer } from 'rxjs';
 
 const observable = timer(1000, 5000); // Emits value after 1 second and then every 5 seconds
 observable.subscribe((value) => console.log(value));
+// Output: 0, 1, 2, 3, 4, 5, ...
 ```
 
 ### **Filtering Operators**
@@ -156,6 +173,7 @@ import { take } from 'rxjs/operators';
 
 const observable = from([1, 2, 3, 4, 5]).pipe(take(3));
 observable.subscribe((value) => console.log(value));
+// Output: 1, 2, 3
 ```
 
 #### **Skip**
@@ -169,6 +187,7 @@ import { skip } from 'rxjs/operators';
 
 const observable = from([1, 2, 3, 4, 5]).pipe(skip(2));
 observable.subscribe((value) => console.log(value));
+// Output: 3, 4, 5
 ```
 
 #### **TakeWhile**
@@ -181,6 +200,7 @@ import { of } from 'rxjs';
 
 const observable = from([1, 2, 3, 4, 5]).pipe(takeWhile((value) => value < 4));
 observable.subscribe((value) => console.log(value));
+// Output: 1, 2, 3
 ```
 
 #### **SkipWhile**
@@ -193,6 +213,7 @@ import { of } from 'rxjs';
 
 const observable = from([1, 2, 3, 4, 5]).pipe(skipWhile((value) => value < 3));
 observable.subscribe((value) => console.log(value));
+// Output: 3, 4, 5
 ```
 
 #### **TakeUntil**
@@ -207,6 +228,7 @@ import { takeUntil } from 'rxjs/operators';
 const notifier = interval(5000);
 const observable = interval(1000).pipe(takeUntil(notifier));
 observable.subscribe((value) => console.log(value));
+// Output: 0, 1, 2, 3, 4
 ```
 
 #### **SkipUntil**
@@ -221,6 +243,7 @@ import { skipUntil } from 'rxjs/operators';
 const notifier = interval(5000);
 const observable = interval(1000).pipe(skipUntil(notifier));
 observable.subscribe((value) => console.log(value));
+// Output: 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, ...
 ```
 
 #### **Filter**
@@ -234,6 +257,7 @@ import { filter } from 'rxjs/operators';
 
 const observable = from([1, 2, 3, 4, 5]).pipe(filter((value) => value % 2 === 0));
 observable.subscribe((value) => console.log(value));
+// Output: 2, 4
 ```
 
 #### **ThrottleTime**
@@ -248,6 +272,7 @@ import { throttleTime } from 'rxjs/operators';
 
 const observable = from([1, 2, 3, 4, 5]).pipe(throttleTime(1000));
 observable.subscribe((value) => console.log(value));
+// Output: 1 (all other values are ignored for 1 second if they arrive within 1 second)
 ```
 
 #### **DebounceTime**
@@ -262,6 +287,7 @@ import { debounceTime } from 'rxjs/operators';
 
 const observable = from([1, 2, 3, 4, 5]).pipe(debounceTime(1000));
 observable.subscribe((value) => console.log(value));
+// Output: 5 (all other values are ignored for 1 second and the last value is emitted)
 ```
 
 [⬆ back to top](#)
@@ -280,6 +306,7 @@ import { reduce } from 'rxjs/operators';
 
 const observable = from([1, 2, 3, 4, 5]).pipe(reduce((acc, value) => acc + value, 0));
 observable.subscribe((value) => console.log(value));
+// Output: 15 (1 + 2 + 3 + 4 + 5 = 15)
 ```
 
 ### **Transformation Operators**
@@ -295,6 +322,7 @@ import { map } from 'rxjs/operators';
 
 const observable = from([1, 2, 3, 4, 5]).pipe(map((value) => value * 2));
 observable.subscribe((value) => console.log(value));
+// Output: 2, 4, 6, 8, 10
 ```
 
 #### **MapTo**
@@ -309,6 +337,7 @@ import { mapTo } from 'rxjs/operators';
 
 const observable = from([1, 2, 3, 4, 5]).pipe(mapTo(10));
 observable.subscribe((value) => console.log(value));
+// Output: 10, 10, 10, 10, 10
 ```
 
 #### **Scan**
@@ -323,7 +352,92 @@ import { scan } from 'rxjs/operators';
 
 const observable = from([1, 2, 3, 4, 5]).pipe(scan((acc, value) => acc + value, 0));
 observable.subscribe((value) => console.log(value));
+// Output: 1, 3, 6, 10, 15
 ```
+
+#### **MergeMap**
+
+- Used to merge multiple observables into a single observable.
+- It takes one argument: projection function.
+
+```typescript
+import { of } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
+
+const observable = from([1, 2, 3, 4, 5]).pipe(mergeMap((value) => of(value * 2)));
+observable.subscribe((value) => console.log(value));
+// Output: 2, 4, 6, 8, 10
+```
+
+#### **ConcatMap**
+
+- Used to concatenate multiple observables into a single observable.
+- It takes one argument: projection function.
+
+```typescript
+import { concatMap, from, interval, map, take } from 'rxjs';
+
+const observable = from(['a', 'b', 'c', 'd']).pipe(
+  concatMap(
+    letter => 
+    interval(1000)
+      .pipe(
+        map(value => letter + ' ' + value),
+        take(3)
+      )
+  ),
+);
+observable.subscribe((value) => console.log(value));
+// Output: a 0, a 1, a 2, b 0, b 1, b 2, c 0, c 1, c 2, d 0, d 1, d 2
+```
+
+#### **SwitchMap**
+
+- Used to switch to the latest observable.
+- Discards the previous observable and subscribes to the latest observable.
+- It takes one argument: projection function.
+
+```typescript
+import { switchMap, from, interval, map, take } from 'rxjs';
+
+const observable = from(['a', 'b', 'c', 'd']).pipe(
+  switchMap(
+    letter => 
+    interval(1000)
+      .pipe(
+        map(value => letter + ' ' + value),
+        take(3)
+      )
+  ),
+);
+observable.subscribe((value) => console.log(value));
+// Output: a 0, a 1, a 2, b 0, b 1, b 2, c 0, c 1, c 2, d 0, d 1, d 2
+```
+
+#### **ExhaustMap**
+
+- Used to ignore new values until the current observable completes.
+- Ignores new values until the current observable completes.
+- It takes one argument: projection function.
+
+```typescript
+import { exhaustMap, from, interval, map, take } from 'rxjs';
+
+const observable = from(['a', 'b', 'c', 'd']).pipe(
+  exhaustMap(
+    letter => 
+    interval(1000)
+      .pipe(
+        map(value => letter + ' ' + value),
+        take(3)
+      )
+  ),
+);
+observable.subscribe((value) => console.log(value));
+// Output: a 0, a 1, a 2
+```
+
+[⬆ back to top](#)
 
 ### **Utility Operators**
 
@@ -341,6 +455,7 @@ import { tap } from 'rxjs/operators';
 
 const observable = from([1, 2, 3, 4, 5]).pipe(tap((value) => console.log(value)));
 observable.subscribe((value) => console.log(value));
+// Output: 1, 1, 2, 2, 3, 3, 4, 4, 5, 5
 ```
 
 #### **Delay**
@@ -354,6 +469,7 @@ import { delay } from 'rxjs/operators';
 
 const observable = from([1, 2, 3, 4, 5]).pipe(delay(1000));
 observable.subscribe((value) => console.log(value));
+// Output: 1, 2, 3, 4, 5 (after 1 second)
 ```
 
 ### **Join Creation**
@@ -372,6 +488,7 @@ const observable2 = interval(500).pipe(take(6));
 
 const observable = merge(observable1, observable2);
 observable.subscribe((value) => console.log(value));
+// Output: 0, 0, 1, 1, 2, 2, 3, 4, 5
 ```
 
 #### **Concat**
@@ -388,6 +505,7 @@ const observable2 = interval(500).pipe(take(6));
 
 const observable = concat(observable1, observable2);
 observable.subscribe((value) => console.log(value));
+// Output: 0, 1, 2, 0, 1, 2, 3, 4, 5
 ```
 
 #### **Race**
@@ -403,6 +521,7 @@ const observable2 = interval(500).pipe(take(6));
 
 const observable = race(observable1, observable2);
 observable.subscribe((value) => console.log(value));
+// Output: 0, 1, 2, 3, 4, 5
 ```
 
 #### **ForkJoin**
@@ -418,7 +537,75 @@ const observable2 = of(4, 5, 6);
 
 const observable = forkJoin(observable1, observable2);
 observable.subscribe((value) => console.log(value));
+// Output: [3, 6]
 ```
+
+### **Join Operators**
+
+#### **MergeAll**
+
+- Used to merge multiple observables into a single observable.
+- Emits values in the order they are emitted by the observables.
+- It takes no arguments.
+
+```typescript
+import { of } from 'rxjs';
+import { mergeAll, map } from 'rxjs/operators';
+
+const observable = of(of(1, 2, 3), of(4, 5, 6)).pipe(mergeAll());
+observable.subscribe((value) => console.log(value));
+// Output: 1, 2, 3, 4, 5, 6
+```
+
+#### **ConcatAll**
+
+- Used to concatenate multiple observables into a single observable.
+- Emits values by concatenating the observables in the order they are provided.
+- It takes no arguments.
+
+```typescript
+import { of } from 'rxjs';
+import { concatAll, map } from 'rxjs/operators';
+
+const observable = of(of(1, 2, 3), of(4, 5, 6)).pipe(concatAll());
+observable.subscribe((value) => console.log(value));
+// Output: 1, 2, 3, 4, 5, 6
+```
+
+#### **CombineLatestAll**
+
+- Used to combine multiple observables into a single observable.
+- Waits till all observables emit at least one value and then emits the latest values.
+- The number of values emitted is equal to the number of observables.
+- It takes no arguments.
+
+```typescript
+import { of } from 'rxjs';
+import { combineLatestAll, interval, map } from 'rxjs/operators';
+
+const observable = of(interval(1000).pipe(take(3)), interval(500).pipe(take(6))).pipe(combineLatestAll());
+observable.subscribe((value) => console.log(value));
+// Output: [0, 0], [0, 1], [0, 2], [1, 2], [1, 3], [1, 4], [2, 4], [2, 5]
+```
+
+#### **CombineLatestWith**
+
+- Used to combine multiple observables into a single observable.
+- Waits till all observables emit at least one value and then emits when any observable emits a value.
+- It takes one or more observables as arguments.
+
+```typescript
+import { combineLatestWith, interval, take } from 'rxjs';
+
+const observable1 = interval(1000).pipe(take(3));
+const observable2 = interval(500).pipe(take(6));
+
+const observable = observable1.pipe(combineLatestWith(observable2));
+observable.subscribe((value) => console.log(value));
+// Output: [0, 0], [0, 1], [0, 2], [1, 2], [1, 3], [1, 4], [2, 4], [2, 5]
+```
+
+[⬆ back to top](#)
 
 ### **Miscellaneous**
 
@@ -434,10 +621,36 @@ const observable = fromFetch('https://jsonplaceholder.typicode.com/posts');
 observable.subscribe((response) => console.log(response));
 ```
 
+#### **NEVER**
+
+- Used to create observable that never emits values.
+- It is used for testing and debugging purposes.
+
+```typescript
+import { NEVER } from 'rxjs';
+
+const observable = NEVER;
+observable.subscribe((value) => console.log(value));
+// Output: (no output)
+```
+
+#### **EMPTY**
+
+- Used to create observable that completes without emitting values.
+- It is used for testing and debugging purposes.
+
+```typescript
+import { EMPTY } from 'rxjs';
+
+const observable = EMPTY;
+observable.subscribe({
+  next: (value) => console.log(value),
+  complete: () => console.log('Completed')
+});
+// Output: Completed
+```
 
 [⬆ back to top](#)
-
-
 
 ## **Methods**
 

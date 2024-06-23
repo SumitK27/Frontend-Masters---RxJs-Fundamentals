@@ -21,7 +21,17 @@
     "merge": "ts-node src/merge.ts",
     "concat": "ts-node src/concat.ts",
     "race": "ts-node src/race.ts",
-    "forkJoin": "ts-node src/forkJoin.ts"
+    "forkJoin": "ts-node src/forkJoin.ts",
+    "mergeAll": "ts-node src/mergeAll.ts",
+    "concatAll": "ts-node src/concatAll.ts",
+    "mergeMap": "ts-node src/mergeMap.ts",
+    "concatMap": "ts-node src/concatMap.ts",
+    "switchMap": "ts-node src/switchMap.ts",
+    "exhaustMap": "ts-node src/exhaustMap.ts",
+    "combineLatestAll": "ts-node src/combineLatestAll.ts",
+    "combineLatestWith": "ts-node src/combineLatestWith.ts",
+    "never": "ts-node src/never.ts",
+    "empty": "ts-node src/empty.ts"
   },
   "keywords": [],
   "author": "",
