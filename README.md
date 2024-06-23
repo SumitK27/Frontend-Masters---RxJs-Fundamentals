@@ -19,6 +19,7 @@
     - [**Filter**](#filter)
     - [**ThrottleTime**](#throttletime)
     - [**DebounceTime**](#debouncetime)
+    - [**DistinctUntilChanged**](#distinctuntilchanged)
   - [**Mathematical and Aggregate Operators**](#mathematical-and-aggregate-operators)
     - [**Reduce**](#reduce)
   - [**Transformation Operators**](#transformation-operators)
@@ -29,6 +30,8 @@
     - [**ConcatMap**](#concatmap)
     - [**SwitchMap**](#switchmap)
     - [**ExhaustMap**](#exhaustmap)
+    - [**First**](#first)
+    - [**Pluck**](#pluck)
   - [**Utility Operators**](#utility-operators)
     - [**Tap**](#tap)
     - [**Delay**](#delay)
@@ -42,6 +45,10 @@
     - [**ConcatAll**](#concatall)
     - [**CombineLatestAll**](#combinelatestall)
     - [**CombineLatestWith**](#combinelatestwith)
+  - [**Error Handling Operators**](#error-handling-operators)
+    - [**CatchError**](#catcherror)
+    - [**Retry**](#retry)
+    - [**RetryWhen**](#retrywhen)
   - [**Miscellaneous**](#miscellaneous)
     - [**FromFetch**](#fromfetch)
     - [**NEVER**](#never)
@@ -292,6 +299,20 @@ observable.subscribe((value) => console.log(value));
 
 [⬆ back to top](#)
 
+#### **DistinctUntilChanged**
+
+- Used to emit values from the observable only if they are different from the previous value.
+- It takes no arguments.
+
+```typescript
+import { of } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
+
+const observable = from([1, 1, 2, 2, 3, 3, 4, 4, 5, 5]).pipe(distinctUntilChanged());
+observable.subscribe((value) => console.log(value));
+// Output: 1, 2, 3, 4, 5
+```
+
 ### **Mathematical and Aggregate Operators**
 
 #### **Reduce**
@@ -438,6 +459,34 @@ observable.subscribe((value) => console.log(value));
 ```
 
 [⬆ back to top](#)
+
+#### **First**
+
+- Used to emit the first value from the observable.
+- It takes no arguments.
+
+```typescript
+import { of } from 'rxjs';
+import { first } from 'rxjs/operators';
+
+const observable = from([1, 2, 3, 4, 5]).pipe(first());
+observable.subscribe((value) => console.log(value));
+// Output: 1
+```
+
+#### **Pluck**
+
+- Used to extract a property from the object.
+- It takes one argument: property name.
+
+```typescript
+import { of } from 'rxjs';
+import { pluck } from 'rxjs/operators';
+
+const observable = of({ name: 'John', age: 30 }).pipe(pluck('name'));
+observable.subscribe((value) => console.log(value));
+// Output: John
+```
 
 ### **Utility Operators**
 
@@ -607,11 +656,89 @@ observable.subscribe((value) => console.log(value));
 
 [⬆ back to top](#)
 
+### **Error Handling Operators**
+
+#### **CatchError**
+
+- Used to catch errors from the observable and return a new observable.
+- It takes one argument: error handling function.
+
+```typescript
+import { of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+
+const observable = of(1, 2, 3, 4, 5).pipe(
+  map((value) => {
+    if (value === 3) {
+      throw new Error('Error occurred');
+    }
+    return value;
+  }),
+  catchError((error) => of('Error occurred'))
+);
+observable.subscribe({
+  next: (value) => console.log(value),
+  error: (error) => console.error(error)
+});
+// Output: 1, 2, Error occurred
+```
+
+#### **Retry**
+
+- Used to retry the observable when an error occurs.
+- It takes one argument: number of retries.
+
+```typescript
+import { of } from 'rxjs';
+import { map, retry } from 'rxjs/operators';
+
+const observable = of(1, 2, 3, 4, 5).pipe(
+  map((value) => {
+    if (value === 3) {
+      throw new Error('Error occurred');
+    }
+    return value;
+  }),
+  retry(2)
+);
+observable.subscribe({
+  next: (value) => console.log(value),
+  error: (error) => console.error(error)
+});
+// Output: 1, 2, 1, 2, 1, 2, Error occurred
+```
+
+#### **RetryWhen**
+
+- Used to retry the observable when an error occurs based on the condition.
+- It takes one argument: condition function.
+
+```typescript
+import { of } from 'rxjs';
+import { map, retryWhen, delay } from 'rxjs/operators';
+
+const observable = of(1, 2, 3, 4, 5).pipe(
+  map((value) => {
+    if (value === 3) {
+      throw new Error('Error occurred');
+    }
+    return value;
+  }),
+  retryWhen((errors) => errors.pipe(delay(1000)))
+);
+observable.subscribe({
+  next: (value) => console.log(value),
+  error: (error) => console.error(error)
+});
+// Output: 1, 2, 1, 2, 1, 2, Error occurred
+```
+
 ### **Miscellaneous**
 
 #### **FromFetch**
 
 - Used to create observable from fetch API.
+- Only throws error if you are offline or the URL is invalid.
 - It takes one argument: URL.
 
 ```typescript

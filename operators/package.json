@@ -31,7 +31,13 @@
     "combineLatestAll": "ts-node src/combineLatestAll.ts",
     "combineLatestWith": "ts-node src/combineLatestWith.ts",
     "never": "ts-node src/never.ts",
-    "empty": "ts-node src/empty.ts"
+    "empty": "ts-node src/empty.ts",
+    "catchError": "ts-node src/catchError.ts",
+    "retry": "ts-node src/retry.ts",
+    "retryWhen": "ts-node src/retryWhen.ts",
+    "pluck": "ts-node src/pluck.ts",
+    "distinctUntilChanged": "ts-node src/distinctUntilChanged.ts",
+    "first": "ts-node src/first.ts"
   },
   "keywords": [],
   "author": "",
