@@ -49,6 +49,9 @@
     - [**CatchError**](#catcherror)
     - [**Retry**](#retry)
     - [**RetryWhen**](#retrywhen)
+  - [**Multicasting Operators**](#multicasting-operators)
+    - [**Share**](#share)
+    - [**ShareReplay**](#sharereplay)
   - [**Miscellaneous**](#miscellaneous)
     - [**FromFetch**](#fromfetch)
     - [**NEVER**](#never)
@@ -733,6 +736,42 @@ observable.subscribe({
 // Output: 1, 2, 1, 2, 1, 2, Error occurred
 ```
 
+### **Multicasting Operators**
+
+#### **Share**
+
+- Used to multicast the observable.
+- Only one subscription is made to the source observable.
+- It takes no arguments.
+
+```typescript
+import { of } from 'rxjs';
+import { share } from 'rxjs/operators';
+
+const observable = of(1, 2, 3, 4, 5).pipe(share());
+observable.subscribe((value) => console.log(value));
+observable.subscribe((value) => console.log(value));
+// Output: 1, 2, 3, 4, 5 (same values are emitted to both subscribers)
+```
+
+#### **ShareReplay**
+
+- Used to multicast the observable and replay the values to new subscribers.
+- It takes one argument: buffer size (number of values to replay ie. will return last n number of values).
+
+```typescript
+import { of } from 'rxjs';
+import { shareReplay } from 'rxjs/operators';
+
+const observable = of(1, 2, 3, 4, 5).pipe(shareReplay(1));
+observable.subscribe((value) => console.log(value));
+observable.subscribe((value) => console.log(value));
+// Output: 1, 2, 3, 4, 5 (same values are emitted to both subscribers)
+```
+
+[⬆ back to top](#)
+
+
 ### **Miscellaneous**
 
 #### **FromFetch**
@@ -803,6 +842,7 @@ observable.subscribe({
   complete: () => console.log("Runs when observable completes")
 });
 ```
+
 ### **UnSubscribe**
 
 - Used to stop the observable from emitting values.

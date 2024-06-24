@@ -37,7 +37,9 @@
     "retryWhen": "ts-node src/retryWhen.ts",
     "pluck": "ts-node src/pluck.ts",
     "distinctUntilChanged": "ts-node src/distinctUntilChanged.ts",
-    "first": "ts-node src/first.ts"
+    "first": "ts-node src/first.ts",
+    "share": "ts-node src/share.ts",
+    "shareReplay": "ts-node src/shareReplay.ts"
   },
   "keywords": [],
   "author": "",
