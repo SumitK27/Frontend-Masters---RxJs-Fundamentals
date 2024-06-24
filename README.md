@@ -1,5 +1,9 @@
 # **RxJs Fundamentals** <!-- omit in toc -->
 
+- This repository contains the fundamentals of RxJS.
+- All the material is based on the [official documentation](https://rxjs.dev/) and [RxJs Fundamentals by FrontendMasters](https://frontendmasters.com/courses/rx-js/)
+
+## **Table of Contents** <!-- omit in toc -->
 - [**Observables**](#observables)
 - [**Operators**](#operators)
   - [**Creation Operators**](#creation-operators)
