@@ -20,6 +20,7 @@
     - [**ThrottleTime**](#throttletime)
     - [**DebounceTime**](#debouncetime)
     - [**DistinctUntilChanged**](#distinctuntilchanged)
+    - [**EMPTY**](#empty)
   - [**Mathematical and Aggregate Operators**](#mathematical-and-aggregate-operators)
     - [**Reduce**](#reduce)
   - [**Transformation Operators**](#transformation-operators)
@@ -55,7 +56,6 @@
   - [**Miscellaneous**](#miscellaneous)
     - [**FromFetch**](#fromfetch)
     - [**NEVER**](#never)
-    - [**EMPTY**](#empty)
 - [**Methods**](#methods)
   - [**Subscribe**](#subscribe)
   - [**UnSubscribe**](#unsubscribe)
@@ -314,6 +314,22 @@ import { distinctUntilChanged } from 'rxjs/operators';
 const observable = from([1, 1, 2, 2, 3, 3, 4, 4, 5, 5]).pipe(distinctUntilChanged());
 observable.subscribe((value) => console.log(value));
 // Output: 1, 2, 3, 4, 5
+```
+
+#### **EMPTY**
+
+- Used to create observable that completes without emitting values.
+- It is used for testing and debugging purposes.
+
+```typescript
+import { EMPTY } from 'rxjs';
+
+const observable = EMPTY;
+observable.subscribe({
+  next: (value) => console.log(value),
+  complete: () => console.log('Completed')
+});
+// Output: Completed
 ```
 
 ### **Mathematical and Aggregate Operators**
@@ -798,22 +814,6 @@ import { NEVER } from 'rxjs';
 const observable = NEVER;
 observable.subscribe((value) => console.log(value));
 // Output: (no output)
-```
-
-#### **EMPTY**
-
-- Used to create observable that completes without emitting values.
-- It is used for testing and debugging purposes.
-
-```typescript
-import { EMPTY } from 'rxjs';
-
-const observable = EMPTY;
-observable.subscribe({
-  next: (value) => console.log(value),
-  complete: () => console.log('Completed')
-});
-// Output: Completed
 ```
 
 [⬆ back to top](#)
